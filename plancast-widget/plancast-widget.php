@@ -111,7 +111,7 @@ class PlanCast_Widget extends WP_Widget {
 					break;
 				}	
 				//get the json string
-				$jsonString = file_get_contents($jsonUrl,0,null,null);			
+				$jsonString = file_get_contents($jsonUrl,0);			
 				//error if empty
 				if($jsonString != ""){
 					//convert the jsonString into a jsonObject
