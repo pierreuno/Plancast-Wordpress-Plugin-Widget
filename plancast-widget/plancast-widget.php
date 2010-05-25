@@ -68,6 +68,13 @@ class PlanCast_Widget extends WP_Widget {
 		$password = $instance['password'];
 		$display = $instance['display'];
 		$limited_height = $instance['limited_height'];
+		
+		if($instance['display_powerby'] == "on"){$display_powerby = 1;}else{$display_powerby = 0;};
+		if($instance['display_plancastlogo'] == "on"){$display_plancastlogo = 1;}else{$display_plancastlogo = 0;};
+		
+		
+
+		
 		if($instance['plan_number'] != null && $instance['plan_number'] != ""){
 			$plan_number = $instance['plan_number'];				
 		}else{
@@ -86,7 +93,7 @@ class PlanCast_Widget extends WP_Widget {
 						//API Url: user/show (get the user info)
 						$jsonUrl = "http://api.plancast.com/02/users/show.json?username=".$login;
 						//get the json string
-						$jsonString = file_get_contents($jsonUrl,0,null,null);						
+						$jsonString = file_get_contents($jsonUrl,0);						
 						if($jsonString != ""){
 							//convert the jsonString into a jsonObject
 							$jsonObject = json_decode($jsonString);
@@ -127,7 +134,7 @@ class PlanCast_Widget extends WP_Widget {
 						echo "</div>";						
 					}
 					
-					if($display == "friends_plans"){
+					if($display == "friends_plans" && $display_plancastlogo == 1){
 							echo '<a class="pc_link_to_plancast" id="pc_header_link_to_plancast" target="_blank" href="http://www.plancast.com"><img src="http://plancast.com/images/logo5.png" alt="Go to Plancast"></a>';
 					}
 					
@@ -142,8 +149,6 @@ class PlanCast_Widget extends WP_Widget {
 								
 								//display the picture + user name
 								if($display == "friends_plans"){
-									$pic_square = $jsonObject->plans[$i]->attendee->pic_square;
-									$name = $jsonObject->plans[$i]->attendee->name;
 									echo '<div class="pc_list_user">';
 										echo '<img src="'.$jsonObject->plans[$i]->attendee->pic_square.'" alt="'.$jsonObject->plans[$i]->attendee->name.'"/>';			
 										echo '<div class="pc_user_name">'.$jsonObject->plans[$i]->attendee->name.'</div>';
@@ -158,12 +163,15 @@ class PlanCast_Widget extends WP_Widget {
 							}
 						}	
 						
-						if($display == "user_plans"){
+						if($display == "user_plans" && $display_plancastlogo == 1){
 							echo '<a class="pc_link_to_plancast" id="pc_footer_link_to_plancast" target="_blank" href="http://www.plancast.com"><img src="http://plancast.com/images/logo5.png" alt="Go to Plancast"></a>';
 						}
 						
 						echo '</div>'; //close id=pc_div_plan div	
-						echo '<div id="exygy_logo">Powered by <a target="_blank" href="http://exygy.com">Exygy&copy;</a></div>';
+						
+						if($display_powerby == 1){
+							echo '<div id="exygy_logo">Powered by <a target="_blank" href="http://exygy.com">Exygy&copy;</a></div>';
+						}
 						
 					}else{ //
 						echo "<p>No plans yet.</p>";
@@ -191,6 +199,8 @@ class PlanCast_Widget extends WP_Widget {
 		$instance['login'] = strip_tags( $new_instance['login'] );
 		$instance['password'] = strip_tags( $new_instance['password'] );		$instance['display'] = strip_tags( $new_instance['display'] );		
 		$instance['limited_height'] = strip_tags( $new_instance['limited_height'] );		$instance['plan_number'] = strip_tags( $new_instance['plan_number'] );
+		$instance['display_plancastlogo'] = strip_tags( $new_instance['display_plancastlogo'] );
+		$instance['display_powerby'] = $new_instance['display_powerby'];
 		
 		return $instance;
 	}
@@ -245,6 +255,15 @@ class PlanCast_Widget extends WP_Widget {
 			<input id="<?php echo $this->get_field_id( 'limited_height' ); ?>" name="<?php echo $this->get_field_name( 'limited_height' ); ?>" value="<?php echo $instance['limited_height']; ?>" style="width:96%;" type="text"/>
 		</p>
 		
+		<p>
+			<label for="<?php echo $this->get_field_id( 'display_plancastlogo' ); ?>"><?php _e('Display the Plancast logo', 'plancast'); ?></label>
+			<input type="checkbox" <?php checked( (bool) $instance['display_plancastlogo'], true ); ?> id="<?php echo $this->get_field_id( 'display_plancastlogo' ); ?>" name="<?php echo $this->get_field_name( 'display_plancastlogo' ); ?>" />
+		</p>
+		
+		<p>
+			<label for="<?php echo $this->get_field_id( 'display_powerby' ); ?>"><?php _e('Display "Power By"', 'plancast'); ?></label>
+			<input type="checkbox" <?php checked( (bool) $instance['display_powerby'], true ); ?> id="<?php echo $this->get_field_id( 'display_powerby' ); ?>" name="<?php echo $this->get_field_name( 'display_powerby' ); ?>" />
+		</p>
 
 	<?php
 	}

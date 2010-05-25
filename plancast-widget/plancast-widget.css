@@ -93,7 +93,9 @@
 /* ----------- Plancast Logo ----------- */
 
 .pc_link_to_plancast img{	
-	width:100%;	
+	margin-right:auto;
+	margin-left:auto;
+	max-width:100%;
 }
 
 #pc_header_link_to_plancast img{
