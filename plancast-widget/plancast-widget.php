@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name: Plancast Widget
+ * Plugin URI: http://github.com/pierreuno/Plancast-Wordpress-Plugin-Widget/tree/master/plancast-widget/
  * Description: A widget that displays your plans or friends plans from PlanCast.
  * Version: 0.1beta
  * Author: Pierre Hunault @Exygy
